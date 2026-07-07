@@ -497,9 +497,9 @@ HRESULT VDJ_API TmPlugin::OnLoad() {
     DeclareParameterButton(&m_nPlay,     PARAM_PLAY,      "Play",      "Play");
     DeclareParameterButton(&m_nStop,     PARAM_STOP,      "Stop",      "Stop");
     DeclareParameterButton(&m_nPause,    PARAM_PAUSE,     "Pause",     "Pause");
-    DeclareParameterFloat(&m_fVolume,    PARAM_VOLUME,    "Volume",    "Volume", 0.0f, 1.0f, 1.0f);
-    DeclareParameterFloat(&m_fAlpha,     PARAM_ALPHA,     "Alpha",     "Alpha", 0.0f, 1.0f, 1.0f);
-    DeclareParameterInt(&m_bLooping,     PARAM_LOOP,      "Loop",      "Loop", 0, 1, 1);
+    DeclareParameterSlider(&m_fVolume,    PARAM_VOLUME,    "Volume",    "Volume", 1.0f);
+    DeclareParameterSlider(&m_fAlpha,     PARAM_ALPHA,     "Alpha",     "Alpha", 1.0f);
+    DeclareParameterSwitch(&m_bLooping,   PARAM_LOOP,      "Loop",      "Loop", 1);
 
     // Load saved state
     TmLicense::LoadFromRegistry(&m_license);
@@ -517,7 +517,7 @@ HRESULT VDJ_API TmPlugin::OnGetPluginInfo(TVdjPluginInfo8* info) {
     info->Description = "Media overlay plugin for VirtualDJ (macOS)";
     info->Version     = "4.0.0";
     info->Bitmap      = nullptr;
-    info->DefaultVideoEngine = VdjVideoEngineOpenGL;
+    // info->DefaultVideoEngine = VdjVideoEngineOpenGL; // Not in SDK
     return S_OK;
 }
 
@@ -542,8 +542,8 @@ HRESULT VDJ_API TmPlugin::OnGetUserInterface(TVdjPluginInterface8* pi) {
     // VirtualDJ creates the parent NSView; we embed our WKWebView into it
     // when the panel is shown via TmWebView::Create.
     pi->hWnd = nullptr; // Will be created on first show
-    pi->Width = 960;
-    pi->Height = 640;
+    // pi->Width = 960;   // Not in SDK struct
+    // pi->Height = 640;  // Not in SDK struct
     return S_OK;
 }
 
@@ -572,7 +572,7 @@ HRESULT VDJ_API TmPlugin::OnDeviceInit() {
     // In a .bundle loaded by VirtualDJ, mainBundle points to VDJ.
     // Use the image path of this bundle's executable instead.
     Dl_info info;
-    if (dladdr((void*)TmPlugin::OnLoad, &info) && info.dli_fname) {
+    if (dladdr((void*)mac_bundle_load, &info) && info.dli_fname) {
         NSString* exePath = [NSString stringWithUTF8String:info.dli_fname];
         NSString* bundleDir = [[exePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
         NSString* shadersDir = [bundleDir stringByAppendingPathComponent:@"shaders"];
@@ -871,7 +871,7 @@ void TmPlugin::HostSetMainShader(int index) { m_mainShaderIndex = index; }
 
 void TmPlugin::HostReloadShaders() {
     Dl_info info;
-    if (dladdr((void*)TmPlugin::OnLoad, &info) && info.dli_fname) {
+    if (dladdr((void*)mac_bundle_load, &info) && info.dli_fname) {
         NSString* exePath = [NSString stringWithUTF8String:info.dli_fname];
         NSString* bundleDir = [[exePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
         NSString* shadersDir = [bundleDir stringByAppendingPathComponent:@"shaders"];
