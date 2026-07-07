@@ -8,8 +8,10 @@
 namespace Gdiplus { class Image; }
 #elif defined(VDJ_MAC)
 // CGImageRef is defined by CoreGraphics on macOS.
-// Provide a typedef for cross-platform compatibility.
+// Provide a typedef for cross-platform compatibility when not already defined.
+#ifndef CGImageRef
 typedef void* CGImageRef;
+#endif
 #endif
 
 // Optional host callback so the UI can drive the plugin/media engine in later
