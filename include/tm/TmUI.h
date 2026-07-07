@@ -8,11 +8,8 @@
 namespace Gdiplus { class Image; }
 #elif defined(VDJ_MAC)
 // CGImageRef is defined by CoreGraphics on macOS.
-// When compiling ObjC++ with Cocoa, it's already available.
-// For pure C++ compilation, provide a fallback typedef.
-#ifndef __OBJC__
+// Provide a typedef for cross-platform compatibility.
 typedef void* CGImageRef;
-#endif
 #endif
 
 // Optional host callback so the UI can drive the plugin/media engine in later
