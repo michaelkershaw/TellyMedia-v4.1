@@ -38,13 +38,44 @@ echo ""
 
 mkdir -p "$OUTPUT_DIR"
 
-# Build the component package
+# Build the component package (relative to user's home directory)
 pkgbuild \
     --root "$PAYLOAD_SRC" \
     --identifier "$IDENTIFIER" \
     --version "$VERSION" \
     --install-location "/" \
+    "$OUTPUT_DIR/TellyMedia-component.pkg"
+
+# Create distribution XML that installs into the current user's home directory.
+# enable_currentUserHome makes the payload land in ~/ instead of the system volume,
+# which works on all modern macOS versions without admin rights.
+cat > "$OUTPUT_DIR/distribution.xml" <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <title>TellyMedia v4 for VirtualDJ</title>
+    <options customize="never" require-scripts="false" hostArchitectures="arm64,x86_64"/>
+    <domains enable_anywhere="false" enable_currentUserHome="true" enable_localSystem="false"/>
+    <choices-outline>
+        <line choice="default">
+            <line choice="com.tellymedia.reborn"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="com.tellymedia.reborn" visible="false">
+        <pkg-ref id="$IDENTIFIER"/>
+    </choice>
+    <pkg-ref id="$IDENTIFIER" version="$VERSION" onConclusion="none">TellyMedia-component.pkg</pkg-ref>
+</installer-gui-script>
+EOF
+
+# Build the final product archive
+productbuild \
+    --distribution "$OUTPUT_DIR/distribution.xml" \
+    --package-path "$OUTPUT_DIR" \
     "$OUTPUT_DIR/TellyMedia-reborn-$VERSION.pkg"
+
+# Clean up intermediates
+rm -f "$OUTPUT_DIR/TellyMedia-component.pkg" "$OUTPUT_DIR/distribution.xml"
 
 echo ""
 echo "Created: $OUTPUT_DIR/TellyMedia-reborn-$VERSION.pkg"
