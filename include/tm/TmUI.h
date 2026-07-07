@@ -6,8 +6,8 @@
 
 #if defined(VDJ_WIN)
 namespace Gdiplus { class Image; }
-// CGImageRef is Windows-only for this header
-typedef void* CGImageRef;
+#elif defined(VDJ_MAC)
+#include <CoreGraphics/CoreGraphics.h>
 #endif
 
 // Optional host callback so the UI can drive the plugin/media engine in later
