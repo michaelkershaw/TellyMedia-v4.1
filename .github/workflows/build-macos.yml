@@ -1,0 +1,52 @@
+name: Build macOS Plugin
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        brew install cmake
+    
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: |
+        cd build
+        make -j$(sysctl -n hw.ncpu)
+    
+    - name: Create plugin bundle
+      run: |
+        cd build
+        make install DESTDIR=install
+        cd install
+        tar -czf TellyMedia-reborn-macOS-ARM.tar.gz Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TellyMedia-reborn-macOS-ARM
+        path: build/install/TellyMedia-reborn-macOS-ARM.tar.gz
+    
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/install/TellyMedia-reborn-macOS-ARM.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
