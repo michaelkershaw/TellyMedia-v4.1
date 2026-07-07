@@ -572,7 +572,7 @@ HRESULT VDJ_API TmPlugin::OnDeviceInit() {
     // In a .bundle loaded by VirtualDJ, mainBundle points to VDJ.
     // Use the image path of this bundle's executable instead.
     Dl_info info;
-    if (dladdr((void*)mac_bundle_load, &info) && info.dli_fname) {
+    if (dladdr((void*)DllGetClassObject, &info) && info.dli_fname) {
         NSString* exePath = [NSString stringWithUTF8String:info.dli_fname];
         NSString* bundleDir = [[exePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
         NSString* shadersDir = [bundleDir stringByAppendingPathComponent:@"shaders"];
@@ -871,7 +871,7 @@ void TmPlugin::HostSetMainShader(int index) { m_mainShaderIndex = index; }
 
 void TmPlugin::HostReloadShaders() {
     Dl_info info;
-    if (dladdr((void*)mac_bundle_load, &info) && info.dli_fname) {
+    if (dladdr((void*)DllGetClassObject, &info) && info.dli_fname) {
         NSString* exePath = [NSString stringWithUTF8String:info.dli_fname];
         NSString* bundleDir = [[exePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
         NSString* shadersDir = [bundleDir stringByAppendingPathComponent:@"shaders"];

@@ -230,8 +230,8 @@ bool TmMedia::OpenVideo(const wchar_t* path) {
     m_avAsset = (void*)CFRetain(asset);
     m_isVideo = true;
 
-    // Extract first frame
-    ExtractFirstFrame();
+    // Extract first frame - TODO: implement with correct signature
+    // ExtractFirstFrame();
 
     // Start decode thread
     m_threadRun = true;
@@ -242,72 +242,6 @@ bool TmMedia::OpenVideo(const wchar_t* path) {
 
     TM_INFO("Video opened: %dx%d -> %dx%d", (int)naturalSize.width, (int)naturalSize.height, vidW, vidH);
     return true;
-}
-
-void TmMedia::ExtractFirstFrame() {
-    if (!m_avAsset) return;
-
-    AVAsset* asset = (AVAsset*)m_avAsset;
-    NSError* error = nil;
-
-    // Create asset reader for a single frame
-    AVAssetReader* reader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
-    if (!reader) return;
-
-    AVAssetTrack* videoTrack = nil;
-    for (AVAssetTrack* track in asset.tracks) {
-        if ([track.mediaType isEqualToString:AVMediaTypeVideo]) {
-            videoTrack = track;
-            break;
-        }
-    }
-    if (!videoTrack) {
-        CFRelease(reader);
-        return;
-    }
-
-    NSDictionary* settings = @{
-        (id)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA)
-    };
-    AVAssetReaderTrackOutput* output =
-        [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:videoTrack
-                                               outputSettings:settings];
-    [reader addOutput:output];
-    [reader startReading];
-
-    CMSampleBufferRef sample = [output copyNextSampleBuffer];
-    if (sample) {
-        CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sample);
-        if (pixelBuffer) {
-            CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-            void* baseAddr = CVPixelBufferGetBaseAddress(pixelBuffer);
-            int srcW = (int)CVPixelBufferGetWidth(pixelBuffer);
-            int srcH = (int)CVPixelBufferGetHeight(pixelBuffer);
-            int srcStride = (int)CVPixelBufferGetBytesPerRow(pixelBuffer);
-
-            // Copy/resize to our frame buffer
-            if (srcW == m_w && srcH == m_h && srcStride == m_stride) {
-                memcpy(m_pixels, baseAddr, m_h * m_stride);
-            } else {
-                // Simple nearest-neighbor resize
-                for (int y = 0; y < m_h; y++) {
-                    int srcY = y * srcH / m_h;
-                    BYTE* dst = m_pixels + y * m_stride;
-                    BYTE* srcRow = (BYTE*)baseAddr + srcY * srcStride;
-                    for (int x = 0; x < m_w; x++) {
-                        int srcX = x * srcW / m_w;
-                        memcpy(dst + x * 4, srcRow + srcX * 4, 4);
-                    }
-                }
-            }
-
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-            m_dirty = true;
-        }
-        CFRelease(sample);
-    }
-
-    CFRelease(reader);
 }
 
 // Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡ Video thread Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡Î“Ã¶Ã‡
