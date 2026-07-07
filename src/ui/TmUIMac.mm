@@ -1,8 +1,8 @@
-// TmUIMac.mm — macOS implementation of TmUI state persistence
+// TmUIMac.mm Ã¢â‚¬â€ macOS implementation of TmUI state persistence
 // Provides SaveState/LoadState using ~/Library/Application Support/VirtualDJ/TellyMedia-v4/
 // Replaces the Windows TmUI.cpp state functions (which use SHGetFolderPath + CreateFileW).
 
-#if defined(VDJ_MAC)
+#if defined(__APPLE__)
 
 #import <Foundation/Foundation.h>
 #include "tm/TmUI.h"

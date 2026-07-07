@@ -1,7 +1,7 @@
-// TmLoggerMac.mm — macOS logger implementation
+// TmLoggerMac.mm Ã¢â‚¬â€ macOS logger implementation
 // Writes to ~/Library/Logs/TellyMedia-v4.log using pthread_mutex for thread safety.
 
-#if defined(VDJ_MAC)
+#if defined(__APPLE__)
 
 #import <Foundation/Foundation.h>
 #include "tm/TmLogger.h"
@@ -30,8 +30,8 @@ void TmLogger::Init() {
 
     s_file = fopen([logPath UTF8String], "a");
     if (s_file) {
-        fprintf(s_file, "\n═══════════════════════════════════════════════════════════════\n");
-        fprintf(s_file, "TellyMedia v4 — Session started\n");
+        fprintf(s_file, "\nÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â\n");
+        fprintf(s_file, "TellyMedia v4 Ã¢â‚¬â€ Session started\n");
         fflush(s_file);
     }
 }
@@ -39,7 +39,7 @@ void TmLogger::Init() {
 void TmLogger::Shutdown() {
     pthread_mutex_lock(&s_cs);
     if (s_file) {
-        fprintf(s_file, "TellyMedia v4 — Session ended\n");
+        fprintf(s_file, "TellyMedia v4 Ã¢â‚¬â€ Session ended\n");
         fclose(s_file);
         s_file = nullptr;
     }

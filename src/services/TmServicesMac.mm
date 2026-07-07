@@ -1,8 +1,8 @@
-// TmServicesMac.mm — macOS services: HTTP (URLSession), JSON parsing,
+// TmServicesMac.mm Ã¢â‚¬â€ macOS services: HTTP (URLSession), JSON parsing,
 // and licensing (Keychain + NSUserDefaults).
 // Replaces the WinHTTP/WinCred/Registry-based TmServices.cpp.
 
-#if defined(VDJ_MAC)
+#if defined(__APPLE__)
 
 #import <Foundation/Foundation.h>
 #import <Security/Security.h>
@@ -18,7 +18,7 @@ constexpr const char* kCredentialService = "com.tellymedia.reborn.authToken";
 constexpr const char* kDefaultsKey = "com.tellymedia.reborn.license";
 constexpr const char* kLicensePlugin = "tellymedia-reborn";
 
-// ─── Synchronous HTTP request using NSURLSession ─────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Synchronous HTTP request using NSURLSession Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 static bool HttpRequest(const wchar_t* url, const char* method, const char* body,
                         char* response, int maxResponse) {
     if (!url || !method || !response || maxResponse <= 0) return false;
@@ -74,7 +74,7 @@ static void ClearLicenseState(LicenseState* st) {
     st->status = LIC_UNCHECKED;
 }
 
-// ─── Keychain helpers ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Keychain helpers Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 static bool KeychainStore(const char* account, const char* data) {
     if (!account || !data) return false;
 
@@ -138,7 +138,7 @@ static bool KeychainDelete(const char* account) {
     return status == errSecSuccess || status == errSecItemNotFound;
 }
 
-// ─── NSUserDefaults helpers (replaces Registry) ──────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ NSUserDefaults helpers (replaces Registry) Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 static NSString* DefaultsKey(const char* field) {
     return [NSString stringWithFormat:@"%@.%s",
         [NSString stringWithUTF8String:kDefaultsKey], field];
@@ -180,7 +180,7 @@ static bool DefaultsGetBool(const char* field, bool defVal = false) {
 
 } // anonymous namespace
 
-// ─── TmHttp namespace ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ TmHttp namespace Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 namespace TmHttp {
 
 bool PostJson(const wchar_t* host, uint16_t port, bool https,
@@ -206,7 +206,7 @@ bool GetText(const wchar_t* host, uint16_t port, bool https,
 
 } // namespace TmHttp
 
-// ─── TmJson namespace (platform-agnostic, same as Windows) ───────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ TmJson namespace (platform-agnostic, same as Windows) Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 namespace TmJson {
 
 bool GetString(const char* json, const char* key, char* out, int maxOut) {
@@ -251,7 +251,7 @@ bool GetInt(const char* json, const char* key, int* out) {
 
 } // namespace TmJson
 
-// ─── TmLicense namespace ─────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ TmLicense namespace Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 namespace TmLicense {
 
 void Init(LicenseState* st) {
@@ -320,7 +320,7 @@ void SaveSecureCredentials(const LicenseState* st) {
 void LoadSecureCredentials(LicenseState* st) {
     if (!st) return;
 
-    // Try to find stored credentials — we need to try with the stored email
+    // Try to find stored credentials Ã¢â‚¬â€ we need to try with the stored email
     // First load email from defaults
     std::string email = DefaultsGetString("userEmail");
     if (email.empty()) {
@@ -333,7 +333,7 @@ void LoadSecureCredentials(LicenseState* st) {
         mbstowcs(st->userEmail, email.c_str(), 255);
         strncpy(st->authToken, authToken, sizeof(st->authToken) - 1);
         st->savePassword = true;
-        TM_INFO("License: Loaded credentials from Keychain — email=%s", email.c_str());
+        TM_INFO("License: Loaded credentials from Keychain Ã¢â‚¬â€ email=%s", email.c_str());
     } else {
         TM_INFO("License: No credentials found in Keychain");
     }
@@ -406,7 +406,7 @@ void LoadFromRegistry(LicenseState* st) {
     s = DefaultsGetString("userEmail");
     if (!s.empty()) mbstowcs(st->userEmail, s.c_str(), 255);
 
-    TM_INFO("License: Loaded metadata from NSUserDefaults — key=%s status=%d type=%s shared=%d",
+    TM_INFO("License: Loaded metadata from NSUserDefaults Ã¢â‚¬â€ key=%s status=%d type=%s shared=%d",
             st->licenseKey, (int)st->status, st->licenseType, st->isSharedLicense);
 }
 
@@ -503,12 +503,12 @@ bool Login(LicenseState* st, const wchar_t* email, const wchar_t* password) {
         if (isShared) {
             snprintf(st->message, sizeof(st->message),
                      "Login successful! (Shared by %s)", sharedOwnerName[0] ? sharedOwnerName : "license owner");
-            TM_INFO("License: LOGIN SUCCESS (SHARED) — %s expires %s (%d/%d devices) — Shared by %s <%s> on %s",
+            TM_INFO("License: LOGIN SUCCESS (SHARED) Ã¢â‚¬â€ %s expires %s (%d/%d devices) Ã¢â‚¬â€ Shared by %s <%s> on %s",
                     licenseType, expiry, currentActivations, maxActivations,
                     sharedOwnerName, sharedOwnerEmail, sharedDate);
         } else {
             strcpy(st->message, "Login successful!");
-            TM_INFO("License: LOGIN SUCCESS — %s expires %s (%d/%d devices)",
+            TM_INFO("License: LOGIN SUCCESS Ã¢â‚¬â€ %s expires %s (%d/%d devices)",
                     licenseType, expiry, currentActivations, maxActivations);
         }
 
@@ -562,7 +562,7 @@ bool Validate(LicenseState* st) {
 
     char response[4096] = {};
     if (!HttpRequest(L"https://djeventsuite.cloud/pages/api/verify-license", "POST", jsonRequest, response, sizeof(response))) {
-        TM_WARN("License: Validate HTTP failed — using cached status");
+        TM_WARN("License: Validate HTTP failed Ã¢â‚¬â€ using cached status");
         return st->licensed;
     }
 
@@ -584,7 +584,7 @@ bool Validate(LicenseState* st) {
         st->maxActivations = maxActivations;
         st->currentActivations = currentActivations;
         SaveToRegistry(st);
-        TM_INFO("License: VALID — %s expires %s (%d/%d devices)", licenseType, expiry, currentActivations, maxActivations);
+        TM_INFO("License: VALID Ã¢â‚¬â€ %s expires %s (%d/%d devices)", licenseType, expiry, currentActivations, maxActivations);
         return true;
     }
 
@@ -646,11 +646,11 @@ bool ActivateDevice(LicenseState* st) {
         st->currentActivations = currentActivations;
         st->maxActivations = maxActivations;
         SaveToRegistry(st);
-        TM_INFO("License: Device activated — %d/%d devices", currentActivations, maxActivations);
+        TM_INFO("License: Device activated Ã¢â‚¬â€ %d/%d devices", currentActivations, maxActivations);
         return true;
     }
 
-    TM_WARN("License: Device activation failed — %s", message);
+    TM_WARN("License: Device activation failed Ã¢â‚¬â€ %s", message);
     return false;
 }
 
