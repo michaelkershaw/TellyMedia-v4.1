@@ -11,15 +11,17 @@
 set -e
 
 PLUGIN_NAME="TellyMedia-reborn.bundle"
-VDJ_PLUGIN_DIR="$HOME/Documents/VirtualDJ/PluginsMacArm/VideoEffect"
+VDJ_DIR_DOCS="$HOME/Documents/VirtualDJ/PluginsMacArm/VideoEffect"
+VDJ_DIR_LIB="$HOME/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
 
 echo "============================================"
 echo "  TellyMedia v4 - macOS Installer"
 echo "============================================"
 echo ""
 
-# Create target directory
-mkdir -p "$VDJ_PLUGIN_DIR"
+# Create target directories
+mkdir -p "$VDJ_DIR_DOCS"
+mkdir -p "$VDJ_DIR_LIB"
 
 if [ $# -eq 1 ]; then
     # Install from tar.gz artifact
@@ -31,7 +33,9 @@ if [ $# -eq 1 ]; then
     echo "Installing from: $TARFILE"
     tar -xzf "$TARFILE" -C "$HOME/"
     echo ""
-    echo "Installed to: $VDJ_PLUGIN_DIR/$PLUGIN_NAME"
+    echo "Installed to:"
+    echo "  $VDJ_DIR_DOCS/$PLUGIN_NAME"
+    echo "  $VDJ_DIR_LIB/$PLUGIN_NAME"
 else
     # Install from local build directory
     SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -48,8 +52,11 @@ else
     fi
 
     echo "Installing from: $SOURCE"
-    cp -R "$SOURCE" "$VDJ_PLUGIN_DIR/"
-    echo "Installed to: $VDJ_PLUGIN_DIR/$PLUGIN_NAME"
+    cp -R "$SOURCE" "$VDJ_DIR_DOCS/"
+    cp -R "$SOURCE" "$VDJ_DIR_LIB/"
+    echo "Installed to:"
+    echo "  $VDJ_DIR_DOCS/$PLUGIN_NAME"
+    echo "  $VDJ_DIR_LIB/$PLUGIN_NAME"
 fi
 
 echo ""

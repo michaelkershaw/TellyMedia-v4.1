@@ -34,8 +34,15 @@ jobs:
       run: |
         cd build
         make install DESTDIR=install
+        # Also copy to Library/Application Support path
+        mkdir -p "install/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+        cp -R "install/Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
+              "install/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
+        # Create tar.gz with both paths
         cd install
-        tar -czf ../TellyMedia-reborn-macOS-ARM.tar.gz "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
+        tar -czf ../TellyMedia-reborn-macOS-ARM.tar.gz \
+            "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
+            "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
     
     - name: Build PKG installer
       run: |
