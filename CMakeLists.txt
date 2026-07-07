@@ -108,11 +108,11 @@ if(APPLE)
 
     # Install target (for make install / cpack)
     install(TARGETS TellyMediaReborn
-        LIBRARY DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect
-        BUNDLE DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect
+        LIBRARY DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+        BUNDLE DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
     )
-    install(DIRECTORY web DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle)
-    install(DIRECTORY shaders DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle)
+    install(DIRECTORY web DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
+    install(DIRECTORY shaders DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
 
     # ─── macOS standalone test app ────────────────────────────────────────────
     add_executable(TellyMediaV4_Standalone
