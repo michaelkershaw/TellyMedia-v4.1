@@ -34,8 +34,8 @@ jobs:
       run: |
         cd build
         make install DESTDIR=install
-        cd install/usr/local
-        tar -czf ../../../TellyMedia-reborn-macOS-ARM.tar.gz "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
+        cd install
+        tar -czf ../TellyMedia-reborn-macOS-ARM.tar.gz "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
     
     - name: Build PKG installer
       run: |

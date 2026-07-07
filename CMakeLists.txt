@@ -78,6 +78,7 @@ if(APPLE)
         SUFFIX ".bundle"
         BUNDLE TRUE
         BUNDLE_EXTENSION "bundle"
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/installer/Info.plist.in"
     )
 
     # Copy web assets next to the bundle
@@ -97,23 +98,25 @@ if(APPLE)
     )
 
     # Deploy to VirtualDJ macOS ARM plugins folder
+    # VirtualDJ looks in ~/Documents/VirtualDJ/PluginsMacArm/ on macOS
     add_custom_target(deploy
         COMMAND ${CMAKE_COMMAND} -E make_directory
-            "$ENV{HOME}/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+            "$ENV{HOME}/Documents/VirtualDJ/PluginsMacArm/VideoEffect"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "$<TARGET_FILE_DIR:TellyMediaReborn>"
-            "$ENV{HOME}/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
+            "$ENV{HOME}/Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
         DEPENDS TellyMediaReborn
         COMMENT "Deploying TellyMedia-reborn.bundle to VirtualDJ macOS ARM VideoEffect folder"
     )
 
     # Install target (for make install / cpack)
+    # VirtualDJ on macOS uses ~/Documents/VirtualDJ/PluginsMacArm/
     install(TARGETS TellyMediaReborn
-        LIBRARY DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
-        BUNDLE DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+        LIBRARY DESTINATION "Documents/VirtualDJ/PluginsMacArm/VideoEffect"
+        BUNDLE DESTINATION "Documents/VirtualDJ/PluginsMacArm/VideoEffect"
     )
-    install(DIRECTORY web DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
-    install(DIRECTORY shaders DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
+    install(DIRECTORY web DESTINATION "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
+    install(DIRECTORY shaders DESTINATION "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
 
     # â”€â”€â”€ macOS standalone test app â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     add_executable(TellyMediaV4_Standalone

@@ -11,7 +11,7 @@
 set -e
 
 PLUGIN_NAME="TellyMedia-reborn.bundle"
-VDJ_PLUGIN_DIR="$HOME/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+VDJ_PLUGIN_DIR="$HOME/Documents/VirtualDJ/PluginsMacArm/VideoEffect"
 
 echo "============================================"
 echo "  TellyMedia v4 - macOS Installer"
@@ -39,8 +39,8 @@ else
 
     if [ -d "$PROJECT_DIR/build" ]; then
         SOURCE="$PROJECT_DIR/build/$PLUGIN_NAME"
-    elif [ -d "$PROJECT_DIR/build/install/usr/local/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/$PLUGIN_NAME" ]; then
-        SOURCE="$PROJECT_DIR/build/install/usr/local/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/$PLUGIN_NAME"
+    elif [ -d "$PROJECT_DIR/build/install/Documents/VirtualDJ/PluginsMacArm/VideoEffect/$PLUGIN_NAME" ]; then
+        SOURCE="$PROJECT_DIR/build/install/Documents/VirtualDJ/PluginsMacArm/VideoEffect/$PLUGIN_NAME"
     else
         echo "Error: Could not find built plugin. Run cmake/make first, or pass a tar.gz file."
         echo "  ./install.sh TellyMedia-reborn-macOS-ARM.tar.gz"

@@ -16,17 +16,16 @@ set -e
 INSTALL_ROOT="${1:?Error: install_root argument required}"
 OUTPUT_DIR="${2:?Error: output_dir argument required}"
 
-PLUGIN_DIR="Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+PLUGIN_DIR="Documents/VirtualDJ/PluginsMacArm/VideoEffect"
 BUNDLE_NAME="TellyMedia-reborn.bundle"
 VERSION="4.0.0"
 IDENTIFIER="com.tellymedia.reborn.installer"
 
 # Find the actual install path inside the root
-# (make install with DESTDIR may prepend /usr/local)
-if [ -d "$INSTALL_ROOT/usr/local/$PLUGIN_DIR/$BUNDLE_NAME" ]; then
-    PAYLOAD_SRC="$INSTALL_ROOT/usr/local"
-elif [ -d "$INSTALL_ROOT/$PLUGIN_DIR/$BUNDLE_NAME" ]; then
+if [ -d "$INSTALL_ROOT/$PLUGIN_DIR/$BUNDLE_NAME" ]; then
     PAYLOAD_SRC="$INSTALL_ROOT"
+elif [ -d "$INSTALL_ROOT/usr/local/$PLUGIN_DIR/$BUNDLE_NAME" ]; then
+    PAYLOAD_SRC="$INSTALL_ROOT/usr/local"
 else
     echo "Error: Could not find $BUNDLE_NAME in $INSTALL_ROOT"
     exit 1
