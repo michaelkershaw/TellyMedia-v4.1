@@ -9,7 +9,7 @@ if(MSVC)
     add_compile_definitions(UNICODE _UNICODE)
 endif()
 
-# ─── Platform detection ──────────────────────────────────────────────────────
+# â”€â”€â”€ Platform detection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if(APPLE)
     set(TM_PLATFORM mac)
     set(TM_PLATFORM_DIR mac)
@@ -25,7 +25,7 @@ endif()
 
 set(TM_INCLUDE ${CMAKE_SOURCE_DIR}/include)
 
-# ─── Shared sources (platform-agnostic) ──────────────────────────────────────
+# â”€â”€â”€ Shared sources (platform-agnostic) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 set(TM_SHARED_SOURCES
     src/ui/TmWebView.cpp
 )
@@ -48,7 +48,7 @@ elseif(APPLE)
     )
 endif()
 
-# ─── macOS: VirtualDJ plugin .bundle ─────────────────────────────────────────
+# â”€â”€â”€ macOS: VirtualDJ plugin .bundle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if(APPLE)
     # Build as .bundle (loadable by VirtualDJ)
     add_library(TellyMediaReborn MODULE
@@ -69,6 +69,7 @@ if(APPLE)
         "-framework CoreMedia"
         "-framework CoreVideo"
         "-framework Security"
+        "-framework IOKit"
         "-framework Foundation"
     )
     set_target_properties(TellyMediaReborn PROPERTIES
@@ -114,7 +115,7 @@ if(APPLE)
     install(DIRECTORY web DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
     install(DIRECTORY shaders DESTINATION "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle")
 
-    # ─── macOS standalone test app ────────────────────────────────────────────
+    # â”€â”€â”€ macOS standalone test app â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     add_executable(TellyMediaV4_Standalone
         ${TM_SHARED_SOURCES}
         src/media/TmMediaMac.mm
@@ -131,6 +132,7 @@ if(APPLE)
         "-framework CoreMedia"
         "-framework CoreVideo"
         "-framework Security"
+        "-framework IOKit"
         "-framework Foundation"
     )
     set_target_properties(TellyMediaV4_Standalone PROPERTIES
@@ -145,7 +147,7 @@ if(APPLE)
 
 endif()
 
-# ─── Windows: existing build (unchanged) ─────────────────────────────────────
+# â”€â”€â”€ Windows: existing build (unchanged) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if(WIN32)
     # Phase 1: Standalone UI test harness
     add_executable(TellyMediaV4_Standalone WIN32
