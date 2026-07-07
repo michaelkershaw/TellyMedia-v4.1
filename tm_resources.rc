@@ -1,0 +1,4 @@
+#define IDR_PNG_LOGO 101
+IDR_PNG_LOGO PNG "tv-v4-logo.png"
+#define IDR_PNG_BIGGER_LOGO 102
+IDR_PNG_BIGGER_LOGO PNG "bigger-tm-logo.png"

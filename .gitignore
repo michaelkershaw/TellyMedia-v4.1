@@ -1,0 +1,49 @@
+# Build outputs
+build/
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.exe
+*.bundle
+
+# Xcode
+*.xcodeproj/
+xcuserdata/
+DerivedData/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# IDE
+.vscode/
+.vs/
+*.suo
+*.user
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+# macOS
+.DS_Store
+*.dSYM
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Web node_modules (if any)
+node_modules/
+
+# VirtualDJ plugins (local deployment)
+VirtualDJ/

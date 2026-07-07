@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TellyMedia v4</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+  <!-- Header -->
+  <header id="header">
+    <div id="logo">TellyMedia v4</div>
+    <nav id="tabs">
+      <button class="tab" data-tab="0">Media</button>
+      <button class="tab" data-tab="1">Layout</button>
+      <button class="tab" data-tab="2">Options</button>
+      <button class="tab" data-tab="3">License</button>
+    </nav>
+    <div id="license-badge"></div>
+    <button id="close-btn">&#x2715;</button>
+  </header>
+
+  <!-- Media Tab -->
+  <div class="tab-content" id="tab-media">
+    <div id="bank-bar"></div>
+    <div id="media-body">
+      <div id="grid-container">
+        <div id="grid"></div>
+        <div id="grid-scrollbar"><div id="grid-thumb"></div></div>
+      </div>
+      <aside id="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-header">SLIDESHOW</div>
+          <button class="sb-btn" data-cmd="slideshowToggle">Enable Slideshow</button>
+          <div class="sb-row">
+            <button class="sb-btn sb-small" data-cmd="delayDec">-</button>
+            <span class="sb-value" id="delay-value">Delay 5s</span>
+            <button class="sb-btn sb-small" data-cmd="delayInc">+</button>
+          </div>
+          <button class="sb-btn" data-cmd="transitionCycle">Transition: Cut</button>
+          <button class="sb-btn" data-cmd="directionCycle">Direction: Forward</button>
+          <button class="sb-btn" data-cmd="loopToggle">Loop: On</button>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">SCALING</div>
+          <div class="sb-row sb-3col">
+            <button class="sb-btn" data-cmd="scaleAspect">Aspect</button>
+            <button class="sb-btn" data-cmd="scaleStretch">Stretch</button>
+            <button class="sb-btn" data-cmd="scaleNoscale">None</button>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">RENDER</div>
+          <div class="sb-row sb-3col">
+            <button class="sb-btn" data-cmd="renderAuto">Auto</button>
+            <button class="sb-btn" data-cmd="renderCpu">CPU</button>
+            <button class="sb-btn" data-cmd="renderGpu">GPU</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Layout Tab -->
+  <div class="tab-content" id="tab-layout" style="display:none">
+    <div id="layout-body">
+      <div id="layout-canvas-wrap">
+        <div id="layout-canvas"></div>
+        <div id="shader-row"></div>
+      </div>
+      <aside id="layout-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-header">PANELS (click to select)</div>
+          <div id="panel-list-wrap">
+            <div id="panel-list"></div>
+            <div id="panel-list-scrollbar"><div id="panel-list-thumb"></div></div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">ADD PANEL</div>
+          <div class="sb-row sb-2col">
+            <button class="sb-btn" data-cmd="addMain">+ Main</button>
+            <button class="sb-btn" data-cmd="addImage">+ Image</button>
+          </div>
+          <div class="sb-row sb-2col">
+            <button class="sb-btn" data-cmd="addText">+ Text</button>
+            <button class="sb-btn" data-cmd="addShader">+ Shader</button>
+          </div>
+          <button class="sb-btn" data-cmd="addSong">+ Song / Now Playing</button>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">POSITION</div>
+          <div id="position-grid"></div>
+          <button class="sb-btn" data-cmd="posFull">Full Screen</button>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">ARRANGE</div>
+          <div class="sb-row sb-2col">
+            <button class="sb-btn" data-cmd="zUp">Bring Fwd</button>
+            <button class="sb-btn" data-cmd="zDown">Send Back</button>
+          </div>
+          <button class="sb-btn sb-danger" data-cmd="deletePanel">Delete Panel</button>
+          <button class="sb-btn" data-cmd="directSelect">Canvas Select: OFF</button>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-header">EVENT LAYOUTS</div>
+          <button class="sb-btn" data-cmd="saveLayout">Save Event Layout...</button>
+          <button class="sb-btn" data-cmd="loadLayout">Load Event Layout &#x25BE</button>
+        </div>
+        <div class="sidebar-section" id="panel-properties" style="display:none">
+          <div class="sidebar-header">PROPERTIES</div>
+          <div id="props-content"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Options Tab -->
+  <div class="tab-content" id="tab-options" style="display:none">
+    <div id="options-card">
+      <div class="opt-group"><div class="opt-header">SCALE MODE</div>
+        <div class="sb-row sb-3col">
+          <button class="sb-btn" data-cmd="optScaleAspect">Aspect</button>
+          <button class="sb-btn" data-cmd="optScaleStretch">Stretch</button>
+          <button class="sb-btn" data-cmd="optScaleNoscale">No Scale</button>
+        </div>
+      </div>
+      <div class="opt-group"><div class="opt-header">TRANSITION</div>
+        <div class="sb-row sb-3col">
+          <button class="sb-btn" data-cmd="optTransCut">Cut</button>
+          <button class="sb-btn" data-cmd="optTransFade">Fade</button>
+          <button class="sb-btn" data-cmd="optTransCross">Crossfade</button>
+        </div>
+      </div>
+      <div class="opt-group"><div class="opt-header">SLIDESHOW DIRECTION</div>
+        <div class="sb-row sb-3col">
+          <button class="sb-btn" data-cmd="optDirFwd">Forward</button>
+          <button class="sb-btn" data-cmd="optDirBack">Backward</button>
+          <button class="sb-btn" data-cmd="optDirRandom">Random</button>
+        </div>
+      </div>
+      <div class="opt-group"><div class="opt-header">SLIDESHOW</div>
+        <div class="sb-row sb-2col">
+          <button class="sb-btn" data-cmd="optLoopToggle">Loop: On</button>
+          <div class="sb-row">
+            <button class="sb-btn sb-small" data-cmd="optDelayDec">-</button>
+            <span class="sb-value" id="opt-delay-value">5s</span>
+            <button class="sb-btn sb-small" data-cmd="optDelayInc">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="opt-group"><div class="opt-header">SHADERS</div>
+        <button class="sb-btn" data-cmd="optShaderEnable">Enable Shaders: Off</button>
+        <button class="sb-btn" data-cmd="optShaderKaraoke">Disable on Karaoke: Off</button>
+        <div class="sb-row">
+          <button class="sb-btn sb-small" data-cmd="optShaderPrev">&lt;</button>
+          <span class="sb-value" id="opt-shader-name">None</span>
+          <button class="sb-btn sb-small" data-cmd="optShaderNext">&gt;</button>
+          <button class="sb-btn" data-cmd="optShaderReload">Reload</button>
+        </div>
+      </div>
+      <div class="opt-group"><div class="opt-header">KARAOKE</div>
+        <button class="sb-btn" data-cmd="optKaraokeAutohide">Disable Panels/Slideshow on Karaoke: On</button>
+      </div>
+      <div class="opt-group"><div class="opt-header">BANKS</div>
+        <button class="sb-btn" data-cmd="optBanksEdit">Bank Names &amp; Colors...</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- License Tab -->
+  <div class="tab-content" id="tab-license" style="display:none">
+    <div id="license-card">
+      <div id="license-logo-area"></div>
+      <div id="license-form">
+        <label class="license-label">Email</label>
+        <input type="email" id="license-email" placeholder="email@example.com">
+        <label class="license-label">Password</label>
+        <input type="password" id="license-password" placeholder="Password">
+        <label class="license-checkbox"><input type="checkbox" id="license-save"> Save credentials</label>
+      </div>
+      <div id="license-status-card">
+        <div id="license-status-badge"></div>
+        <div id="license-details"></div>
+        <div id="license-status-text"></div>
+      </div>
+      <div id="license-buttons">
+        <button class="sb-btn" data-cmd="licenseLogin">Login</button>
+        <div class="sb-row sb-2col">
+          <button class="sb-btn" data-cmd="licenseValidate">Validate Now</button>
+          <button class="sb-btn" data-cmd="licenseActivate">Activate Device</button>
+        </div>
+        <div id="license-logout-row" style="display:none">
+          <button class="sb-btn" data-cmd="licenseLogout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <footer id="status-bar">
+    <span id="status-text"></span>
+    <span id="status-license-badge"></span>
+  </footer>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
