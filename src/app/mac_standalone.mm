@@ -95,8 +95,8 @@ public:
     _webViewData = TmWebView::Create(_uiData, _contentView, [webPath UTF8String]);
 
     // Set up command callback
-    __block TmUIData* uiData = _uiData;
-    __block TmWebViewData* wvd = _webViewData;
+    TmUIData* uiData = _uiData;
+    TmWebViewData* wvd = _webViewData;
     _webViewData->onCommand = [uiData, wvd](const char* json) {
         TmWebView::DispatchCommand(uiData, json);
         // Push updated state back to JS
