@@ -18,10 +18,13 @@
 @class TmWebViewDelegate;
 @class WKWebView;
 @class NSView;
+typedef TmWebViewDelegate* TmWebViewDelegateRef;
+typedef WKWebView* WKWebViewRef;
+typedef NSView* NSViewRef;
 #else
-typedef void* TmWebViewDelegate;
-typedef void* WKWebView;
-typedef void* NSView;
+typedef void* TmWebViewDelegateRef;
+typedef void* WKWebViewRef;
+typedef void* NSViewRef;
 #endif
 
 struct TmWebViewData {
@@ -29,11 +32,11 @@ struct TmWebViewData {
     TmUIData* uiData;
 
     // WKWebView and delegate
-    WKWebView webView;
-    TmWebViewDelegate delegate;
+    WKWebViewRef webView;
+    TmWebViewDelegateRef delegate;
 
     // The parent NSView
-    NSView parentView;
+    NSViewRef parentView;
 
     // Callback to dispatch commands from JS
     std::function<void(const char* json)> onCommand;
@@ -46,7 +49,7 @@ struct TmWebViewData {
 namespace TmWebView {
     // Create the WKWebView and embed it in the parent NSView.
     // The web/ folder must be at webPath (absolute path to directory containing index.html).
-    TmWebViewData* Create(TmUIData* uiData, NSView parentView, const char* webPath);
+    TmWebViewData* Create(TmUIData* uiData, NSViewRef parentView, const char* webPath);
     void Destroy(TmWebViewData* data);
 
     // Push full state to JS as JSON. Called whenever C++ state changes.

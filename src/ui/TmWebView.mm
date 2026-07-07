@@ -19,7 +19,7 @@
 - (void)userContentController:(WKUserContentController*)ucc
       didReceiveScriptMessage:(WKScriptMessage*)message {
     if (![message.name isEqualToString:@"tmBridge"]) return;
-    NSString* body = [message body isKindOfClass:[NSString class]]
+    NSString* body = [[message body] isKindOfClass:[NSString class]]
                      ? (NSString*)[message body]
                      : [[NSString alloc] initWithData:(NSData*)[message body]
                                              encoding:NSUTF8StringEncoding];
@@ -51,7 +51,7 @@
 
 namespace TmWebView {
 
-TmWebViewData* Create(TmUIData* uiData, NSView parentView, const char* webPath) {
+TmWebViewData* Create(TmUIData* uiData, NSViewRef parentView, const char* webPath) {
     TmWebViewData* data = new TmWebViewData;
     data->uiData = uiData;
     data->parentView = parentView;

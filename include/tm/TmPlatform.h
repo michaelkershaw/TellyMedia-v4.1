@@ -19,7 +19,9 @@ typedef uint32_t DWORD;
 typedef uint16_t WORD;
 typedef int32_t  LONG;
 typedef uint32_t ULONG;
+#ifndef __OBJC__
 typedef int      BOOL;
+#endif
 typedef unsigned char BYTE;
 typedef wchar_t  WCHAR;
 typedef wchar_t* LPWSTR;
