@@ -2,6 +2,7 @@
 #include "tm/TmPlatform.h"
 #include "tm/TmTypes.h"
 #include "tm/TmTheme.h"
+#include "vdj/vdjPlugin8.h"
 
 #if defined(VDJ_WIN)
 namespace Gdiplus { class Image; }
