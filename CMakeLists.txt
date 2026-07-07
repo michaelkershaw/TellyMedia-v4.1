@@ -95,16 +95,24 @@ if(APPLE)
         COMMENT "Copying GLSL shaders to bundle output directory"
     )
 
-    # Deploy to VirtualDJ plugins folder
+    # Deploy to VirtualDJ macOS ARM plugins folder
     add_custom_target(deploy
         COMMAND ${CMAKE_COMMAND} -E make_directory
-            "$ENV{HOME}/Documents/VirtualDJ/Plugins/VideoEffect"
+            "$ENV{HOME}/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "$<TARGET_FILE_DIR:TellyMediaReborn>"
-            "$ENV{HOME}/Documents/VirtualDJ/Plugins/VideoEffect/TellyMedia-reborn.bundle"
+            "$ENV{HOME}/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
         DEPENDS TellyMediaReborn
-        COMMENT "Deploying TellyMedia-reborn.bundle to VirtualDJ VideoEffect folder"
+        COMMENT "Deploying TellyMedia-reborn.bundle to VirtualDJ macOS ARM VideoEffect folder"
     )
+
+    # Install target (for make install / cpack)
+    install(TARGETS TellyMediaReborn
+        LIBRARY DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect
+        BUNDLE DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect
+    )
+    install(DIRECTORY web DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle)
+    install(DIRECTORY shaders DESTINATION Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle)
 
     # ─── macOS standalone test app ────────────────────────────────────────────
     add_executable(TellyMediaV4_Standalone

@@ -63,7 +63,7 @@ void SaveState(TmUIData* d) {
     }
 
     [data writeToFile:path atomically:YES];
-    TM_INFO("State saved to %@", path);
+    TM_INFO("State saved to %s", [path UTF8String]);
 }
 
 void LoadState(TmUIData* d) {
@@ -131,7 +131,7 @@ void LoadState(TmUIData* d) {
         }
     }
 
-    TM_INFO("State loaded from %@", path);
+    TM_INFO("State loaded from %s", [path UTF8String]);
 }
 
 } // namespace TmUI

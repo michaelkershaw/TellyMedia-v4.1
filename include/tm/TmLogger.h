@@ -18,13 +18,19 @@ public:
 
 private:
     static void Write(const char *level, const char *msg);
+#if defined(VDJ_WIN)
     static HANDLE           s_hFile;
     static CRITICAL_SECTION s_cs;
+#elif defined(VDJ_MAC)
+    static void*            s_hFile;  // FILE*
+    static void*            s_cs;     // pthread_mutex_t*
+#endif
     static bool             s_inited;
 };
 
 #define TM_INFO(...)  TmLogger::Info(__VA_ARGS__)
 #define TM_WARN(...)  TmLogger::Warn(__VA_ARGS__)
 #define TM_ERR(...)   TmLogger::Error(__VA_ARGS__)
+#define TM_ERROR(...) TmLogger::Error(__VA_ARGS__)
 #define TM_HR(t,hr)   TmLogger::HR(t, hr)
 #define TM_SEP()      TmLogger::Sep()

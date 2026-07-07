@@ -16,6 +16,7 @@
 // Windows type aliases for shared code
 typedef int32_t  HRESULT;
 typedef uint32_t DWORD;
+typedef uint16_t WORD;
 typedef int32_t  LONG;
 typedef uint32_t ULONG;
 typedef int      BOOL;
@@ -56,6 +57,8 @@ typedef struct tagSIZE {
 #define E_NOTIMPL ((HRESULT)0x80004001L)
 #define E_FAIL    ((HRESULT)0x80004005L)
 #define CLASS_E_CLASSNOTAVAILABLE ((HRESULT)0x80040111L)
+#define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
+#define FAILED(hr)    (((HRESULT)(hr)) < 0)
 
 // BOOL values
 #define TRUE  1
@@ -75,7 +78,7 @@ typedef DWORD COLORREF;
 #define RGB(r,g,b) ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)))
 #define GetRValue(c) ((BYTE)((c)))
 #define GetGValue(c) ((BYTE)(((c)>>8)))
-#define GetBValue(c) ((BYTE)((c)>>16)))
+#define GetBValue(c) ((BYTE)((c)>>16))
 
 // GUID
 struct GUID {

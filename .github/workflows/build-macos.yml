@@ -28,14 +28,14 @@ jobs:
     - name: Build
       run: |
         cd build
-        make -j$(sysctl -n hw.ncpu)
+        make -j$(sysctl -n hw.ncpu) VERBOSE=1 2>&1 | tee build.log || (tail -100 build.log && exit 1)
     
     - name: Create plugin bundle
       run: |
         cd build
         make install DESTDIR=install
         cd install
-        tar -czf TellyMedia-reborn-macOS-ARM.tar.gz Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle
+        tar -czf TellyMedia-reborn-macOS-ARM.tar.gz "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
