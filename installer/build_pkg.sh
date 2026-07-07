@@ -47,29 +47,10 @@ for BASE in "$PAYLOAD_SRC/Documents/VirtualDJ/PluginsMacArm/VideoEffect" \
     fi
 done
 
-# Postinstall script: remove quarantine + re-sign in the user's home
-SCRIPTS_DIR="$OUTPUT_DIR/pkg-scripts"
-mkdir -p "$SCRIPTS_DIR"
-cat > "$SCRIPTS_DIR/postinstall" <<'EOF'
-#!/bin/bash
-# Runs as the installing user (home-dir install).
-for DIR in "$HOME/Documents/VirtualDJ/PluginsMacArm/VideoEffect" \
-           "$HOME/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect" \
-           "$HOME/Library/Application Support/VirtualDJ/Plugins64/VideoEffect"; do
-    B="$DIR/TellyMedia-reborn.bundle"
-    if [ -d "$B" ]; then
-        xattr -dr com.apple.quarantine "$B" 2>/dev/null || true
-        codesign --force --deep -s - "$B" 2>/dev/null || true
-    fi
-done
-exit 0
-EOF
-chmod +x "$SCRIPTS_DIR/postinstall"
-
 # Build the component package (relative to user's home directory)
+# NOTE: no scripts — home-directory installs reject packages with scripts.
 pkgbuild \
     --root "$PAYLOAD_SRC" \
-    --scripts "$SCRIPTS_DIR" \
     --identifier "$IDENTIFIER" \
     --version "$VERSION" \
     --install-location "/" \
@@ -82,7 +63,7 @@ cat > "$OUTPUT_DIR/distribution.xml" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <installer-gui-script minSpecVersion="1">
     <title>TellyMedia v4 for VirtualDJ</title>
-    <options customize="never" require-scripts="true" hostArchitectures="arm64,x86_64"/>
+    <options customize="never" require-scripts="false" hostArchitectures="arm64,x86_64"/>
     <domains enable_anywhere="false" enable_currentUserHome="true" enable_localSystem="false"/>
     <choices-outline>
         <line choice="default">
