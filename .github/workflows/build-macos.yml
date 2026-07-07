@@ -23,7 +23,9 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
     
     - name: Build
       run: |
@@ -34,15 +36,19 @@ jobs:
       run: |
         cd build
         make install DESTDIR=install
-        # Also copy to Library/Application Support path
+        # Also copy to Library/Application Support paths (PluginsMacArm + Plugins64)
         mkdir -p "install/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"
+        mkdir -p "install/Library/Application Support/VirtualDJ/Plugins64/VideoEffect"
         cp -R "install/Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
               "install/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
-        # Create tar.gz with both paths
+        cp -R "install/Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
+              "install/Library/Application Support/VirtualDJ/Plugins64/VideoEffect/TellyMedia-reborn.bundle"
+        # Create tar.gz with all paths
         cd install
         tar -czf ../TellyMedia-reborn-macOS-ARM.tar.gz \
             "Documents/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
-            "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle"
+            "Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect/TellyMedia-reborn.bundle" \
+            "Library/Application Support/VirtualDJ/Plugins64/VideoEffect/TellyMedia-reborn.bundle"
     
     - name: Build PKG installer
       run: |

@@ -40,7 +40,8 @@ mkdir -p "$OUTPUT_DIR"
 
 # Ad-hoc sign the bundles in the payload (required on Apple Silicon)
 for BASE in "$PAYLOAD_SRC/Documents/VirtualDJ/PluginsMacArm/VideoEffect" \
-            "$PAYLOAD_SRC/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"; do
+            "$PAYLOAD_SRC/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect" \
+            "$PAYLOAD_SRC/Library/Application Support/VirtualDJ/Plugins64/VideoEffect"; do
     if [ -d "$BASE/$BUNDLE_NAME" ]; then
         codesign --force --deep -s - "$BASE/$BUNDLE_NAME" || true
     fi
@@ -53,7 +54,8 @@ cat > "$SCRIPTS_DIR/postinstall" <<'EOF'
 #!/bin/bash
 # Runs as the installing user (home-dir install).
 for DIR in "$HOME/Documents/VirtualDJ/PluginsMacArm/VideoEffect" \
-           "$HOME/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect"; do
+           "$HOME/Library/Application Support/VirtualDJ/PluginsMacArm/VideoEffect" \
+           "$HOME/Library/Application Support/VirtualDJ/Plugins64/VideoEffect"; do
     B="$DIR/TellyMedia-reborn.bundle"
     if [ -d "$B" ]; then
         xattr -dr com.apple.quarantine "$B" 2>/dev/null || true
